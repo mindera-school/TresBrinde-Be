@@ -1,15 +1,16 @@
-import {ProductModule} from './products/product.module';
-import {Module} from "@nestjs/common";
-import {UserModule} from './user/user.module';
-import {DatabaseModule} from "./database/database.module";
-import {AuthModule} from "./auth/auth.module";
-import {ConfigModule} from "@nestjs/config";
-import {APP_GUARD} from "@nestjs/core";
+import { ProductModule } from "./products/product.module";
+import { Module } from "@nestjs/common";
+import { UserModule } from "./user/user.module";
+import { DatabaseModule } from "./database/database.module";
+import { AuthModule } from "./auth/auth.module";
+import { ConfigModule } from "@nestjs/config";
+import { APP_GUARD } from "@nestjs/core";
 import JwtAuthenticationGuard from "./auth/guards/jwtAuthentication.guard";
-import {RolesGuard} from "./auth/guards/roles.guard";
-import {CategoriesModule} from "./categories/categories.module";
-import {FileModule} from "./files/file.module";
-import {BudgetModule} from "./budget/budget.module";
+import { RolesGuard } from "./auth/guards/roles.guard";
+import { CategoriesModule } from "./categories/categories.module";
+import { FileModule } from "./files/file.module";
+import { BudgetModule } from "./budget/budget.module";
+import { ExcelModule } from "./excel/excel.module";
 
 @Module({
     imports: [
@@ -20,7 +21,8 @@ import {BudgetModule} from "./budget/budget.module";
         CategoriesModule,
         ProductModule,
         FileModule,
-        BudgetModule
+        BudgetModule,
+        ExcelModule
     ],
     providers: [
         {
@@ -33,6 +35,4 @@ import {BudgetModule} from "./budget/budget.module";
         }
     ],
 })
-
-export class AppModule {
-}
+export class AppModule {}
