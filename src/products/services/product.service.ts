@@ -99,7 +99,7 @@ export class ProductService {
             )
         }
 
-        //await queryRunner.commitTransaction();
+        await queryRunner.commitTransaction();
         await queryRunner.release()
         return ProductConverter.fromProductEntityToProductDetailsDto(
             productEntity, subCategoryDetailsDtoList, priceQuantityDetailsDtoList, productPropertyDetailsDtoList, tableImagesDetailsDtoList
