@@ -23,8 +23,35 @@ export class ExcelService {
 
 		let book = new Workbook();
 
-		book.xlsx.writeFile("whatever")
+		let sheet = book.addWorksheet("Sheet 1");
 
-		return createReadStream(join(process.cwd(), file));
+		sheet.addRows(rows);
+
+		let File = await new Promise(
+			(resolve, reject) => {
+				tmp.file(
+					{ discardDescriptor: true, prefix: `MyExcelSheet`, postfix: ".xlsx", mode: parseInt("0600", 8) },
+					async (err, file) => {
+						if (err) {
+							throw new BadRequestException(err);
+						}
+
+						book.xlsx
+							.writeFile(file)
+							.then(
+								(_) => {
+									resolve(file);
+								},
+							)
+							.catch(
+								(err) => {
+									throw new BadRequestException(err);
+								},
+							);
+					},
+				);
+			},
+		);
+		return File;
 	}
 }

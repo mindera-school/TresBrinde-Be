@@ -3,6 +3,7 @@ import { Response } from "express";
 import { ExcelService } from "./excel.service";
 import { Roles } from "../decorators/roles.decorator";
 import { Public } from "../decorators/public.decorator";
+import { ReplaySubject } from "rxjs";
 
 @Controller('excel')
 export class ExcelController {
@@ -12,12 +13,10 @@ export class ExcelController {
 	@Get('download')
 	@Roles()
     @Header ('Content-Type', 'text/xlsx')
-	getFile(): StreamableFile {
-		return new StreamableFile(this.excelService.downloadExcel());
-	}
-	/*async downloadReport(@Res() res: Response) {
+	async downloadReport(@Res() res: Response) {
 		let result = await this.excelService.downloadExcel();
-		res.header("Content-type", "text/xlsx");
-		res.download(`${result}`);
-	}*/
+		res.header("Content-type", "application/excel");
+		console.log(result);
+		res.send(require("fs").createReadStream(result));
+	}
 }
