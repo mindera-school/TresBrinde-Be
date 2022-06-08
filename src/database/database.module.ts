@@ -12,6 +12,7 @@ import {TableImagesEntity} from "../products/entities/tableImages.entity";
 import {BudgetEntity} from "../budget/entities/budget.entity";
 import {BudgetImageEntity} from "../budget/entities/budgetImage.entity";
 import {BudgetProductEntity} from "../budget/entities/budgetProduct.entity";
+import * as fs from "fs";
 
 @Module({
     imports: [
@@ -19,12 +20,15 @@ import {BudgetProductEntity} from "../budget/entities/budgetProduct.entity";
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => ({
-                type: 'postgres',
-                host: configService.get('POSTGRES_HOST'),
-                port: configService.get('POSTGRES_PORT'),
-                username: configService.get('POSTGRES_USER'),
-                password: configService.get('POSTGRES_PASSWORD'),
-                database: configService.get('POSTGRES_DB'),
+                type: 'mariadb',
+                host: configService.get('DATABASE_HOST'),
+                port: configService.get('DATABASE_PORT'),
+                username: configService.get('DATABASE_USER'),
+                password: encodeURIComponent(configService.get('DATABASE_PASSWORD')),
+                database: configService.get('DATABASE_DB'),
+                ssl: {
+                    ca:fs.readFileSync(configService.get('DATABASE_CERTIFICATE_PATH')).toString(),
+                },
                 entities: [
                     UserEntity,
                     CategoryEntity,
