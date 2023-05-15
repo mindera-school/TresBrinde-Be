@@ -14,6 +14,7 @@ export class CategoriesConverter {
       .with({
         id: categoryEntity.id,
         name: categoryEntity.name,
+        description: categoryEntity.description,
         subCategories: categoryEntity.subCategories,
         image: categoryEntity.image,
       })
@@ -27,6 +28,7 @@ export class CategoriesConverter {
       .with({
         id: categoryDetailsDto.id,
         name: categoryDetailsDto.name,
+        description: categoryDetailsDto.description,
         subCategories: categoryDetailsDto.subCategories,
         image: categoryDetailsDto.image,
       })
@@ -66,6 +68,7 @@ export class CategoriesConverter {
       .with({
         id: null,
         name: createCategoryDto.name.toLowerCase().trim(),
+        description: createCategoryDto.description,
         subCategories: null,
       })
       .build();
