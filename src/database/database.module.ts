@@ -20,15 +20,12 @@ import * as fs from "fs";
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => ({
-                type: 'mariadb',
+                type: 'mysql',
                 host: configService.get('DATABASE_HOST'),
                 port: configService.get('DATABASE_PORT'),
                 username: configService.get('DATABASE_USER'),
                 password: encodeURIComponent(configService.get('DATABASE_PASSWORD')),
                 database: configService.get('DATABASE_DB'),
-                ssl: {
-                    ca:fs.readFileSync(configService.get('DATABASE_CERTIFICATE_PATH')).toString(),
-                },
                 entities: [
                     UserEntity,
                     CategoryEntity,
