@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import {
-  CATEGORYALREADYEXISTSEXCEPTION,
-  CATEGORYNOTFOUNDEXCEPTION,
-  DATABASECONNECTIONEXCEPTION,
-  SUBCATEGORYALREADYEXISTSEXCEPTION,
+  CATEGORY_ALREADY_EXISTS_EXCEPTION,
+  CATEGORY_NOT_FOUND_EXCEPTION,
+  DATABASE_CONNECTION_EXCEPTION,
+  SUBCATEGORY_ALREADY_EXISTS_EXCEPTION,
   SUBCATEGORYNOTFOUNDEXCEPTION,
 } from "../constants";
 import { CategoriesConverter } from "./categories.converter";
@@ -44,11 +44,6 @@ export class CategoriesService {
     private subCategoryRepository: SubCategoryRepository
   ) {}
 
-  @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: "Create new category",
-    type: CategoryDetailsDto,
-  })
   async createCategory(
     createCategoryDto: CreateCategoryDto
   ): Promise<CategoryDetailsDto> {
@@ -58,7 +53,7 @@ export class CategoriesService {
       })
     ) {
       throw new HttpException(
-        CATEGORYALREADYEXISTSEXCEPTION,
+        CATEGORY_ALREADY_EXISTS_EXCEPTION,
         HttpStatus.CONFLICT
       );
     }
@@ -72,7 +67,7 @@ export class CategoriesService {
       categoryEntity = await this.categoryRepository.save(categoryEntity);
     } catch (e) {
       throw new HttpException(
-        DATABASECONNECTIONEXCEPTION,
+        DATABASE_CONNECTION_EXCEPTION,
         HttpStatus.BAD_REQUEST
       );
     }
@@ -91,7 +86,7 @@ export class CategoriesService {
       })
     ) {
       throw new HttpException(
-        SUBCATEGORYALREADYEXISTSEXCEPTION,
+        SUBCATEGORY_ALREADY_EXISTS_EXCEPTION,
         HttpStatus.CONFLICT
       );
     }
@@ -113,7 +108,7 @@ export class CategoriesService {
       );
     } catch (e) {
       throw new HttpException(
-        DATABASECONNECTIONEXCEPTION,
+        DATABASE_CONNECTION_EXCEPTION,
         HttpStatus.BAD_REQUEST
       );
     }
@@ -172,8 +167,8 @@ export class CategoriesService {
 
     if (!categoryEntity) {
       throw new HttpException(
-        CATEGORYNOTFOUNDEXCEPTION,
-        HttpStatus.INTERNAL_SERVER_ERROR
+        CATEGORY_NOT_FOUND_EXCEPTION,
+        HttpStatus.NOT_FOUND
       );
     }
 
@@ -214,7 +209,7 @@ export class CategoriesService {
       categoryEntity = await this.categoryRepository.save(categoryEntity);
     } catch (e) {
       throw new HttpException(
-        DATABASECONNECTIONEXCEPTION,
+        DATABASE_CONNECTION_EXCEPTION,
         HttpStatus.BAD_REQUEST
       );
     }
@@ -243,7 +238,7 @@ export class CategoriesService {
       subCategoryEntity = await this.categoryRepository.save(subCategoryEntity);
     } catch (e) {
       throw new HttpException(
-        DATABASECONNECTIONEXCEPTION,
+        DATABASE_CONNECTION_EXCEPTION,
         HttpStatus.BAD_REQUEST
       );
     }
@@ -259,7 +254,10 @@ export class CategoriesService {
     });
 
     if (!category) {
-      throw new HttpException(CATEGORYNOTFOUNDEXCEPTION, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        CATEGORY_NOT_FOUND_EXCEPTION,
+        HttpStatus.NOT_FOUND
+      );
     }
 
     await this.categoryRepository
@@ -292,7 +290,10 @@ export class CategoriesService {
       await this.categoryRepository.findOne({ where: { id: body.categoryId } });
 
     if (!categoryEntity) {
-      throw new HttpException(CATEGORYNOTFOUNDEXCEPTION, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        CATEGORY_NOT_FOUND_EXCEPTION,
+        HttpStatus.NOT_FOUND
+      );
     }
 
     if (categoryEntity.image) {
@@ -313,7 +314,10 @@ export class CategoriesService {
       await this.categoryRepository.findOne({ where: { id: id } });
 
     if (!categoryEntity) {
-      throw new HttpException(CATEGORYNOTFOUNDEXCEPTION, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        CATEGORY_NOT_FOUND_EXCEPTION,
+        HttpStatus.NOT_FOUND
+      );
     }
 
     if (categoryEntity.image) {

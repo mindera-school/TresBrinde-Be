@@ -2,6 +2,9 @@ import {
   ApiBearerAuth,
   ApiConsumes,
   ApiOperation,
+  ApiProduces,
+  ApiProperty,
+  ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import {
@@ -10,6 +13,7 @@ import {
   DefaultValuePipe,
   Delete,
   Get,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
@@ -33,6 +37,25 @@ import { FastifyFileInterceptor } from "../files/singleFile.interceptor";
 import { diskStorage } from "multer";
 import { Request } from "express";
 import { ApiImplicitQuery } from "@nestjs/swagger/dist/decorators/api-implicit-query.decorator";
+import { CategoryDetailsDto } from "./dto/categories/CategoryDetails.Dto";
+import {
+  CATEGORY_ALREADY_EXISTS_EXCEPTION,
+  CATEGORY_NOT_FOUND_EXCEPTION,
+  CATEGORY_NOT_REMOVED_EXCEPTION,
+  DATABASE_CONNECTION_EXCEPTION,
+  OPERATION_FAILED,
+  SUBCATEGORY_ALREADY_EXISTS_EXCEPTION,
+  USER_NOT_AUTORIZED,
+} from "src/constants";
+import { CategoryAlreadyExistDto } from "src/errorDTOs/categoryAlreadyExists.Dto";
+import { DatabaseConnectionFailedDto } from "src/errorDTOs/databaseConnectionFailed.Dto";
+import { UserNotAutorizedDto } from "src/errorDTOs/userNotAutorized.Dto";
+import { InternalServerErrorDto } from "src/errorDTOs/internalServerError.Dto";
+import { SubcategoryAlreadyExistDto } from "src/errorDTOs/subcategoryAlreadyExists.Dto";
+import { SubCategoryDetailsDto } from "./dto/subCategories/SubCategoryDetails.Dto";
+import { CategoryNotFoundDto } from "src/errorDTOs/categoryNotFound.Dto";
+import { PaginatedCategoriesDto } from "./dto/categories/PaginatedCategories.Dto";
+import { CategoryNotRemovedDto } from "src/errorDTOs/categoryNotRemoved.Dto";
 
 @ApiTags("Categories")
 @Controller("categories")
@@ -43,6 +66,31 @@ export class CategoriesController {
   @Post("category")
   @Roles(UserRole.Admin)
   @ApiOperation({ summary: "Create new category" })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: "Category created successfully",
+    type: CategoryDetailsDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: CATEGORY_ALREADY_EXISTS_EXCEPTION,
+    type: CategoryAlreadyExistDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: DATABASE_CONNECTION_EXCEPTION,
+    type: DatabaseConnectionFailedDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: USER_NOT_AUTORIZED,
+    type: UserNotAutorizedDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: OPERATION_FAILED,
+    type: InternalServerErrorDto,
+  })
   async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoryService.createCategory(createCategoryDto);
   }
@@ -50,6 +98,22 @@ export class CategoriesController {
   @Post("subCategory")
   @Roles(UserRole.Admin)
   @ApiOperation({ summary: "Create new sub category" })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: "Subcategory created successfully",
+    //TODO: This object code is a bit wrong
+    type: SubCategoryDetailsDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: SUBCATEGORY_ALREADY_EXISTS_EXCEPTION,
+    type: SubcategoryAlreadyExistDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: DATABASE_CONNECTION_EXCEPTION,
+    type: DatabaseConnectionFailedDto,
+  })
   async createSubCategory(@Body() createSubCategoryDto: CreateSubCategoryDto) {
     return this.categoryService.createSubCategory(createSubCategoryDto);
   }
@@ -58,6 +122,16 @@ export class CategoriesController {
   @Public()
   @Roles(UserRole.Admin, UserRole.User)
   @ApiOperation({ summary: "Get specific category" })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Category found successfully",
+    type: CategoryDetailsDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: CATEGORY_NOT_FOUND_EXCEPTION,
+    type: CategoryNotFoundDto,
+  })
   async getCategory(@Param("id", ParseIntPipe) id: number) {
     return this.categoryService.findCategory(id);
   }
@@ -77,6 +151,11 @@ export class CategoriesController {
     description: "The page to return",
     required: false,
     type: Number,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Categories retrieved successfully",
+    type: PaginatedCategoriesDto,
   })
   async getPaginatedCategories(
     @Query("limit", new DefaultValuePipe(30), ParseIntPipe) limit: number,
@@ -125,6 +204,26 @@ export class CategoriesController {
   @Patch("category/:id")
   @Roles(UserRole.Admin)
   @ApiOperation({ summary: "Update a specific category" })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Category updated successfully",
+    type: CategoryDetailsDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: DATABASE_CONNECTION_EXCEPTION,
+    type: DatabaseConnectionFailedDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: CATEGORY_NOT_FOUND_EXCEPTION,
+    type: CategoryNotFoundDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: USER_NOT_AUTORIZED,
+    type: UserNotAutorizedDto,
+  })
   async updateCategory(
     @Param("id", ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto
@@ -145,6 +244,25 @@ export class CategoriesController {
   @Delete("category/:id")
   @Roles(UserRole.Admin)
   @ApiOperation({ summary: "Deletes a specific category" })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Category removed successfully",
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: CATEGORY_NOT_FOUND_EXCEPTION,
+    type: CategoryNotFoundDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_MODIFIED,
+    description: CATEGORY_NOT_REMOVED_EXCEPTION,
+    type: CategoryNotRemovedDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: USER_NOT_AUTORIZED,
+    type: UserNotAutorizedDto,
+  })
   async removeCategory(@Param("id", ParseIntPipe) id: number) {
     return this.categoryService.removeCategory(id);
   }
@@ -169,6 +287,21 @@ export class CategoriesController {
       fileFilter: imageFileFilter,
     })
   )
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Image added to category successfully",
+    type: CategoryDetailsDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: CATEGORY_NOT_FOUND_EXCEPTION,
+    type: CategoryNotFoundDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: USER_NOT_AUTORIZED,
+    type: UserNotAutorizedDto,
+  })
   async addImageToCategory(
     @UploadedFile() file: Express.Multer.File,
     @Body("body") body: SingleFileToCategoryDto,
@@ -180,6 +313,21 @@ export class CategoriesController {
   @Delete(":id/image")
   @ApiOperation({ summary: "Deletes a specific image from category" })
   @Roles(UserRole.Admin)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Category image removed successfully",
+    type: CategoryDetailsDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: CATEGORY_NOT_FOUND_EXCEPTION,
+    type: CategoryNotFoundDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: USER_NOT_AUTORIZED,
+    type: UserNotAutorizedDto,
+  })
   async removeImage(@Param("id", ParseIntPipe) id: number) {
     return this.categoryService.removeCategoryImage(id);
   }

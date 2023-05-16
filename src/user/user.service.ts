@@ -1,6 +1,10 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {UserConverter} from "./user.converter";
-import {DATABASECONNECTIONEXCEPTION, USERALREADYEXISTSEXCEPTION, USERNOTFOUNDEXCEPTION} from "../constants";
+import {
+  DATABASE_CONNECTION_EXCEPTION,
+  USERALREADYEXISTSEXCEPTION,
+  USERNOTFOUNDEXCEPTION,
+} from "../constants";
 import {InjectRepository} from "@nestjs/typeorm";
 import {PaginatedUsersDto} from "./dto/paginated-users.Dto";
 import {DetailsUserDto} from "./dto/details-user.dto";
@@ -27,7 +31,10 @@ export class UserService {
         try {
             userEntity = await this.userRepository.save(userEntity)
         } catch (e) {
-            throw new HttpException(DATABASECONNECTIONEXCEPTION, HttpStatus.BAD_REQUEST);
+            throw new HttpException(
+              DATABASE_CONNECTION_EXCEPTION,
+              HttpStatus.BAD_REQUEST
+            );
         }
 
         return UserConverter.fromUserEntityToUserDetailsDto(userEntity);
@@ -78,7 +85,10 @@ export class UserService {
         try {
             userEntity = await this.userRepository.save(userEntity)
         } catch (e) {
-            throw new HttpException(DATABASECONNECTIONEXCEPTION, HttpStatus.BAD_REQUEST);
+            throw new HttpException(
+              DATABASE_CONNECTION_EXCEPTION,
+              HttpStatus.BAD_REQUEST
+            );
         }
 
         return UserConverter.fromUserEntityToUserDetailsDto(userEntity)
