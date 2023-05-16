@@ -8,6 +8,9 @@ export class CategoryDetailsDto {
   @ApiProperty()
   name: string;
 
+  @ApiProperty({ required: false })
+  description?: string;
+
   @ApiProperty({ type: () => [SubCategoryEntity] })
   subCategories: SubCategoryEntity[];
 

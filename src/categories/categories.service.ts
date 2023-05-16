@@ -27,8 +27,15 @@ import { PaginatedSubCategoriesDto } from "./dto/subCategories/PaginatedSubCateg
 
 import { SingleFileToCategoryDto } from "../files/dto/singleFileToCategory.dto";
 import { QueryRunner } from "typeorm";
+import {
+  ApiTags,
+  ApiResponse,
+  ApiBadRequestResponse,
+  ApiConflictResponse,
+} from "@nestjs/swagger";
 
 @Injectable()
+@ApiTags("Categories")
 export class CategoriesService {
   constructor(
     @InjectRepository(CategoryRepository)
@@ -37,6 +44,11 @@ export class CategoriesService {
     private subCategoryRepository: SubCategoryRepository
   ) {}
 
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: "Create new category",
+    type: CategoryDetailsDto,
+  })
   async createCategory(
     createCategoryDto: CreateCategoryDto
   ): Promise<CategoryDetailsDto> {
@@ -196,6 +208,7 @@ export class CategoriesService {
       );
 
     categoryEntity.name = updateCategoryDto.name;
+    categoryEntity.description = updateCategoryDto.description;
 
     try {
       categoryEntity = await this.categoryRepository.save(categoryEntity);

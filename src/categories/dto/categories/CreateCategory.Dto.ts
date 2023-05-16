@@ -11,4 +11,13 @@ export class CreateCategoryDto {
     maxLength: 60,
   })
   name: string;
+
+  @IsNotEmpty()
+  @MaxLength(200, { message: INVALIDFIELDEXCEPTION("description") })
+  @ApiProperty({
+    example: "example",
+    description: "Category Description",
+    maxLength: 200,
+  })
+  description: string;
 }
