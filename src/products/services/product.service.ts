@@ -1,11 +1,11 @@
 import {
-    CATEGORYNOTCREATEDEXCEPTION,
-    DATABASECONNECTIONEXCEPTION,
-    PRICEQUANTITYNOTCREATEDEXCEPTION,
-    PRODUCTALREADYEXISTSEXCEPTION,
-    PRODUCTNOTFOUNDEXCEPTION,
-    PROPERTYNOTCREATEDEXCEPTION,
-    SUBCATEGORYNOTCREATEDEXCEPTION
+  CATEGORYNOTCREATEDEXCEPTION,
+  DATABASE_CONNECTION_EXCEPTION,
+  PRICEQUANTITYNOTCREATEDEXCEPTION,
+  PRODUCTALREADYEXISTSEXCEPTION,
+  PRODUCTNOTFOUNDEXCEPTION,
+  PROPERTYNOTCREATEDEXCEPTION,
+  SUBCATEGORYNOTCREATEDEXCEPTION,
 } from "../../constants";
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {CategoriesConverter} from "../../categories/categories.converter";
@@ -84,7 +84,10 @@ export class ProductService {
             productEntity = await queryRunner.manager.save(productEntity);
         } catch (e) {
             await queryRunner.rollbackTransaction();
-            throw new HttpException(DATABASECONNECTIONEXCEPTION, HttpStatus.BAD_REQUEST);
+            throw new HttpException(
+              DATABASE_CONNECTION_EXCEPTION,
+              HttpStatus.BAD_REQUEST
+            );
         }
 
         for (const priceQuantityEntity of await this.priceQuantityService.createPriceQuantities(createProductDto.priceQuantities, productEntity, queryRunner)) {
@@ -435,7 +438,10 @@ export class ProductService {
             try {
                 await this.productRepository.save(productEntity)
             } catch (e) {
-                throw new HttpException(DATABASECONNECTIONEXCEPTION, HttpStatus.BAD_REQUEST)
+                throw new HttpException(
+                  DATABASE_CONNECTION_EXCEPTION,
+                  HttpStatus.BAD_REQUEST
+                );
             }
         } else {
             await this.tableImagesService.create(productEntity, file.path)

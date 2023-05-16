@@ -1,4 +1,4 @@
-import {OPERATIONFAILED, USERALREADYEXISTSEXCEPTION, WRONGCREDETIALSEXCEPTION} from "../constants";
+import {OPERATION_FAILED, USERALREADYEXISTSEXCEPTION, WRONGCREDETIALSEXCEPTION} from "../constants";
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {CreateUserDto} from "../user/dto/create-user.dto";
 import {UserService} from "../user/user.service";
@@ -33,9 +33,12 @@ export class AuthService {
             return createdUser;
         } catch (error) {
             if (error.response === USERALREADYEXISTSEXCEPTION) {
-                throw new HttpException(OPERATIONFAILED, HttpStatus.BAD_REQUEST);
+                throw new HttpException(
+                  OPERATION_FAILED,
+                  HttpStatus.BAD_REQUEST
+                );
             }
-            throw new HttpException(OPERATIONFAILED, HttpStatus.BAD_REQUEST);
+            throw new HttpException(OPERATION_FAILED, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -52,9 +55,12 @@ export class AuthService {
             return createdUser;
         } catch (error) {
             if (error.response === USERALREADYEXISTSEXCEPTION) {
-                throw new HttpException(OPERATIONFAILED, HttpStatus.BAD_REQUEST);
+                throw new HttpException(
+                  OPERATION_FAILED,
+                  HttpStatus.BAD_REQUEST
+                );
             }
-            throw new HttpException(OPERATIONFAILED, HttpStatus.BAD_REQUEST);
+            throw new HttpException(OPERATION_FAILED, HttpStatus.BAD_REQUEST);
         }
 
     }

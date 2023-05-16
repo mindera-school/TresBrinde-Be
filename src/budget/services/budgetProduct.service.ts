@@ -5,7 +5,7 @@ import {QueryRunner} from "typeorm";
 import {BudgetEntity} from "../entities/budget.entity";
 import {ProductEntity} from "../../products/entities/product.entity";
 import {BudgetProductConverter} from "../converters/budgetProduct.converter";
-import {DATABASECONNECTIONEXCEPTION} from "../../constants";
+import { DATABASE_CONNECTION_EXCEPTION } from "../../constants";
 import {CreateProductBudgetDto} from "../dto/budgetProduct/createProductBudget.dto";
 import {BudgetProductEntity} from "../entities/budgetProduct.entity";
 
@@ -26,7 +26,10 @@ export class BudgetProductService {
             )
         } catch (e) {
             await queryRunner.rollbackTransaction()
-            throw new HttpException(DATABASECONNECTIONEXCEPTION, HttpStatus.BAD_REQUEST)
+            throw new HttpException(
+              DATABASE_CONNECTION_EXCEPTION,
+              HttpStatus.BAD_REQUEST
+            );
         }
     }
 }

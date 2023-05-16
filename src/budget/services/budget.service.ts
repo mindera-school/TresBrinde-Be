@@ -9,7 +9,7 @@ import {BudgetEntity} from "../entities/budget.entity";
 import {Connection} from "typeorm";
 import {ProductConverter} from "../../products/converters/product.converter";
 import {BudgetProductService} from "./budgetProduct.service";
-import {BUDGETNOTFOUND, DATABASECONNECTIONEXCEPTION} from "../../constants";
+import { BUDGETNOTFOUND, DATABASE_CONNECTION_EXCEPTION } from "../../constants";
 import {BudgetProductDetailsDto} from "../dto/budgetProduct/budgetProductDetails.dto";
 import {BudgetProductConverter} from "../converters/budgetProduct.converter";
 import {DetailsUserDto} from "../../user/dto/details-user.dto";
@@ -52,7 +52,10 @@ export class BudgetService {
             await queryRunner.manager.save(budgetEntity)
         } catch (e) {
             await queryRunner.rollbackTransaction()
-            throw new HttpException(DATABASECONNECTIONEXCEPTION, HttpStatus.BAD_REQUEST)
+            throw new HttpException(
+              DATABASE_CONNECTION_EXCEPTION,
+              HttpStatus.BAD_REQUEST
+            );
         }
 
         for (const budgetProduct of createBudgetDto.productsQuantity) {
@@ -148,7 +151,10 @@ export class BudgetService {
             budgetEntity = await queryRunner.manager.save(budgetEntity)
         } catch (e) {
             await queryRunner.rollbackTransaction()
-            throw new HttpException(DATABASECONNECTIONEXCEPTION, HttpStatus.BAD_REQUEST)
+            throw new HttpException(
+              DATABASE_CONNECTION_EXCEPTION,
+              HttpStatus.BAD_REQUEST
+            );
         }
 
         await queryRunner.manager.delete(BudgetProductEntity, {budget: id})

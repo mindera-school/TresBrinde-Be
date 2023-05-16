@@ -4,7 +4,7 @@ import {CreatePriceQuantityDto} from "../dto/priceQuantity/create-priceQuantity.
 import {PriceQuantityEntity} from "../entities/priceQuantity.entity";
 import {ProductEntity} from "../entities/product.entity";
 import {PriceQuantityConverter} from "../converters/priceQuantity.converter";
-import {DATABASECONNECTIONEXCEPTION} from "../../constants";
+import { DATABASE_CONNECTION_EXCEPTION } from "../../constants";
 import {QueryRunner} from "typeorm";
 
 @Injectable()
@@ -30,7 +30,10 @@ export class PriceQuantityService {
             }
         } catch (e) {
             await queryRunner.rollbackTransaction();
-            throw new HttpException(DATABASECONNECTIONEXCEPTION, HttpStatus.BAD_REQUEST)
+            throw new HttpException(
+              DATABASE_CONNECTION_EXCEPTION,
+              HttpStatus.BAD_REQUEST
+            );
         }
 
         return priceQuantityEntities;
@@ -61,7 +64,10 @@ export class PriceQuantityService {
                 await queryRunner.manager.delete(PriceQuantityEntity, toDeletePriceQuantity)
             } catch (e) {
                 await queryRunner.rollbackTransaction();
-                throw new HttpException(DATABASECONNECTIONEXCEPTION, HttpStatus.BAD_REQUEST)
+                throw new HttpException(
+                  DATABASE_CONNECTION_EXCEPTION,
+                  HttpStatus.BAD_REQUEST
+                );
             }
         }
 
@@ -75,7 +81,10 @@ export class PriceQuantityService {
                 )
             } catch (e) {
                 await queryRunner.rollbackTransaction();
-                throw new HttpException(DATABASECONNECTIONEXCEPTION, HttpStatus.BAD_REQUEST)
+                throw new HttpException(
+                  DATABASE_CONNECTION_EXCEPTION,
+                  HttpStatus.BAD_REQUEST
+                );
             }
         }
     }

@@ -4,7 +4,10 @@ import {CreateProductPropertiesDto} from "../dto/productProperties/create-produc
 import {ProductEntity} from "../entities/product.entity";
 import {ProductPropertyEntity} from "../entities/productProperty.entity";
 import {ProductPropertyConverter} from "../converters/productProperty.converter";
-import {DATABASECONNECTIONEXCEPTION, PROPERTYNOTFOUNDEXCEPTION} from "../../constants";
+import {
+  DATABASE_CONNECTION_EXCEPTION,
+  PROPERTYNOTFOUNDEXCEPTION,
+} from "../../constants";
 import {PropertyService} from "./property.service";
 import {QueryRunner} from "typeorm";
 import {PropertyConverter} from "../converters/property.converter";
@@ -50,7 +53,10 @@ export class ProductPropertyService {
             }
         } catch (e) {
             await queryRunner.rollbackTransaction();
-            throw new HttpException(DATABASECONNECTIONEXCEPTION, HttpStatus.BAD_REQUEST)
+            throw new HttpException(
+              DATABASE_CONNECTION_EXCEPTION,
+              HttpStatus.BAD_REQUEST
+            );
         }
 
 
@@ -93,7 +99,10 @@ export class ProductPropertyService {
                 await queryRunner.manager.delete(ProductPropertyEntity, toDeleteProductProperty)
             } catch (e) {
                 await queryRunner.rollbackTransaction();
-                throw new HttpException(DATABASECONNECTIONEXCEPTION, HttpStatus.BAD_REQUEST)
+                throw new HttpException(
+                  DATABASE_CONNECTION_EXCEPTION,
+                  HttpStatus.BAD_REQUEST
+                );
             }
         }
 
@@ -116,7 +125,10 @@ export class ProductPropertyService {
                 )
             } catch (e) {
                 await queryRunner.rollbackTransaction();
-                throw new HttpException(DATABASECONNECTIONEXCEPTION, HttpStatus.BAD_REQUEST)
+                throw new HttpException(
+                  DATABASE_CONNECTION_EXCEPTION,
+                  HttpStatus.BAD_REQUEST
+                );
             }
         }
     }
