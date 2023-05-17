@@ -60,6 +60,7 @@ import { PaginatedCategoriesDto } from "./dto/categories/PaginatedCategories.Dto
 import { CategoryNotRemovedDto } from "src/errorDTOs/categoryNotRemoved.Dto";
 import { SubcategoryNotFoundDto } from "src/errorDTOs/subcategoryNotFound.Dto";
 import { PaginatedSubCategoriesDto } from "./dto/subCategories/PaginatedSubCategories.Dto";
+import { SubcategoryNotRemovedDto } from "src/errorDTOs/subcategoryNotRemoved.Dto";
 
 @ApiTags("Categories")
 @Controller("categories")
@@ -325,7 +326,7 @@ export class CategoriesController {
   @ApiResponse({
     status: HttpStatus.NOT_MODIFIED,
     description: SUBCATEGORY_NOT_REMOVED_EXCEPTION,
-    type: CategoryNotRemovedDto,
+    type: SubcategoryNotRemovedDto,
   })
   async removeSubCategory(@Param("id", ParseIntPipe) id: number) {
     return this.categoryService.removeSubCategory(id);
