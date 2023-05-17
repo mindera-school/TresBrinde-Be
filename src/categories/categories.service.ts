@@ -5,7 +5,7 @@ import {
   CATEGORY_NOT_FOUND_EXCEPTION,
   DATABASE_CONNECTION_EXCEPTION,
   SUBCATEGORY_ALREADY_EXISTS_EXCEPTION,
-  SUBCATEGORYNOTFOUNDEXCEPTION,
+  SUBCATEGORY_NOT_FOUND_EXCEPTION,
 } from "../constants";
 import { CategoriesConverter } from "./categories.converter";
 
@@ -183,7 +183,7 @@ export class CategoriesService {
 
     if (!subCategoryEntity) {
       throw new HttpException(
-        SUBCATEGORYNOTFOUNDEXCEPTION,
+        SUBCATEGORY_NOT_FOUND_EXCEPTION,
         HttpStatus.NOT_FOUND
       );
     }
@@ -272,7 +272,7 @@ export class CategoriesService {
 
     if (!subCategory) {
       throw new HttpException(
-        SUBCATEGORYNOTFOUNDEXCEPTION,
+        SUBCATEGORY_NOT_FOUND_EXCEPTION,
         HttpStatus.NOT_FOUND
       );
     }

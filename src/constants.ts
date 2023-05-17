@@ -13,7 +13,7 @@ export const CATEGORYNOTCREATEDEXCEPTION = "Category was not created.";
 export const CATEGORY_ALREADY_EXISTS_EXCEPTION = "Category already exists.";
 export const CATEGORY_NOT_REMOVED_EXCEPTION = "Category was not removed.";
 
-export const SUBCATEGORYNOTFOUNDEXCEPTION = "Sub category not found.";
+export const SUBCATEGORY_NOT_FOUND_EXCEPTION = "Sub category not found.";
 export const SUBCATEGORYNOTCREATEDEXCEPTION = "Sub category was not created.";
 export const SUBCATEGORY_ALREADY_EXISTS_EXCEPTION = "Sub category already exists.";
 
