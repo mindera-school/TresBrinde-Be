@@ -1,25 +1,21 @@
-import {DomainBuilder} from "ts-generic-builder";
-import {CategoryEntity} from "../../entities/category.entity";
-import {ProductEntity} from "../../../products/entities/product.entity";
+import { ApiProperty } from "@nestjs/swagger";
+import { CategoryEntity } from "../../entities/category.entity";
+import { ProductEntity } from "../../../products/entities/product.entity";
 
-interface subCategoryDetailsDtoProps {
-    id: number;
-    name: string;
-    products: ProductEntity[];
-    mainCategory: CategoryEntity;
-}
+export class SubCategoryDetailsDto {
+  @ApiProperty()
+  id: number;
 
-export class SubCategoryDetailsDto implements subCategoryDetailsDtoProps {
+  @ApiProperty()
+  name: string;
 
-    id: number;
-    name: string;
-    products: ProductEntity[];
-    mainCategory: CategoryEntity;
+  @ApiProperty({ type: () => [ProductEntity] })
+  products: ProductEntity[];
 
-    constructor(builder: DomainBuilder<subCategoryDetailsDtoProps, SubCategoryDetailsDto> & subCategoryDetailsDtoProps) {
-        this.id = builder.id;
-        this.name = builder.name;
-        this.products = builder.products;
-        this.mainCategory = builder.mainCategory;
-    }
+  @ApiProperty()
+  mainCategory: CategoryEntity;
+
+  constructor(partial: Partial<SubCategoryDetailsDto>) {
+    Object.assign(this, partial);
+  }
 }
