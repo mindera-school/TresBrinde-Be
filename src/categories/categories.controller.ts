@@ -45,6 +45,8 @@ import {
   DATABASE_CONNECTION_EXCEPTION,
   OPERATION_FAILED,
   SUBCATEGORY_ALREADY_EXISTS_EXCEPTION,
+  SUBCATEGORY_NOT_FOUND_EXCEPTION,
+  SUBCATEGORY_NOT_REMOVED_EXCEPTION,
   USER_NOT_AUTORIZED,
 } from "src/constants";
 import { CategoryAlreadyExistDto } from "src/errorDTOs/categoryAlreadyExists.Dto";
@@ -56,6 +58,8 @@ import { SubCategoryDetailsDto } from "./dto/subCategories/SubCategoryDetails.Dt
 import { CategoryNotFoundDto } from "src/errorDTOs/categoryNotFound.Dto";
 import { PaginatedCategoriesDto } from "./dto/categories/PaginatedCategories.Dto";
 import { CategoryNotRemovedDto } from "src/errorDTOs/categoryNotRemoved.Dto";
+import { SubcategoryNotFoundDto } from "src/errorDTOs/subcategoryNotFound.Dto";
+import { PaginatedSubCategoriesDto } from "./dto/subCategories/PaginatedSubCategories.Dto";
 
 @ApiTags("Categories")
 @Controller("categories")
@@ -101,7 +105,6 @@ export class CategoriesController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: "Subcategory created successfully",
-    //TODO: This object code is a bit wrong
     type: SubCategoryDetailsDto,
   })
   @ApiResponse({
@@ -168,6 +171,16 @@ export class CategoriesController {
   @Public()
   @Roles(UserRole.Admin, UserRole.User)
   @ApiOperation({ summary: "Get specific subCategory" })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Subcategory found successfully",
+    type: SubCategoryDetailsDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: SUBCATEGORY_NOT_FOUND_EXCEPTION,
+    type: SubcategoryNotFoundDto,
+  })
   async getSubCategory(@Param("id", ParseIntPipe) id: number) {
     return this.categoryService.findSubCategory(id);
   }
@@ -187,6 +200,11 @@ export class CategoriesController {
     description: "The page to return",
     required: false,
     type: Number,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Paginated subcategories retrieved successfully",
+    type: PaginatedSubCategoriesDto,
   })
   async getPaginatedSubCategories(
     @Query("categoryId", new DefaultValuePipe(0), ParseIntPipe)
@@ -234,6 +252,31 @@ export class CategoriesController {
   @Patch("subCategory/:id")
   @Roles(UserRole.Admin)
   @ApiOperation({ summary: "Update a specific subCategory" })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Subcategory updated successfully",
+    type: SubCategoryDetailsDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: DATABASE_CONNECTION_EXCEPTION,
+    type: DatabaseConnectionFailedDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: SUBCATEGORY_ALREADY_EXISTS_EXCEPTION,
+    type: SubcategoryAlreadyExistDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: CATEGORY_NOT_FOUND_EXCEPTION,
+    type: CategoryNotFoundDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: USER_NOT_AUTORIZED,
+    type: UserNotAutorizedDto,
+  })
   async updateSubCategory(
     @Param("id", ParseIntPipe) id: number,
     @Body() updateSubCategoryDto: UpdateSubCategoryDto
@@ -270,6 +313,20 @@ export class CategoriesController {
   @Delete("subCategory/:id")
   @Roles(UserRole.Admin)
   @ApiOperation({ summary: "Deletes a specific subCategory" })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Subcategory removed successfully",
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: SUBCATEGORY_NOT_FOUND_EXCEPTION,
+    type: SubcategoryNotFoundDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_MODIFIED,
+    description: SUBCATEGORY_NOT_REMOVED_EXCEPTION,
+    type: CategoryNotRemovedDto,
+  })
   async removeSubCategory(@Param("id", ParseIntPipe) id: number) {
     return this.categoryService.removeSubCategory(id);
   }
