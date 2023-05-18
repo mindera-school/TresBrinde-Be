@@ -33,6 +33,8 @@ import {
   ApiBadRequestResponse,
   ApiConflictResponse,
 } from "@nestjs/swagger";
+import { CategoryNotRemovedDto } from "src/errorDTOs/categoryNotRemoved.Dto";
+import { SubcategoryNotRemovedDto } from "src/errorDTOs/subcategoryNotRemoved.Dto";
 
 @Injectable()
 @ApiTags("Categories")
@@ -263,7 +265,7 @@ export class CategoriesService {
     await this.categoryRepository
       .remove(category)
       .then(() => ({ statusCode: HttpStatus.OK }))
-      .catch(() => ({ statusCode: HttpStatus.NOT_MODIFIED }));
+      .catch(() => CategoryNotRemovedDto);
   }
 
   async removeSubCategory(id: number) {
@@ -279,7 +281,7 @@ export class CategoriesService {
     await this.subCategoryRepository
       .remove(subCategory)
       .then(() => ({ statusCode: HttpStatus.OK }))
-      .catch(() => ({ statusCode: HttpStatus.NOT_MODIFIED }));
+      .catch(() => SubcategoryNotRemovedDto);
   }
 
   async addImageToCategory(

@@ -1,5 +1,7 @@
+import { ApiProperty } from "@nestjs/swagger";
 import {SubCategoryDetailsDto} from "./SubCategoryDetails.Dto";
 
 export class PaginatedSubCategoriesDto {
-    subCategories: SubCategoryDetailsDto[];
+  @ApiProperty({ type: () => [SubCategoryDetailsDto] })
+  subCategories: SubCategoryDetailsDto[];
 }

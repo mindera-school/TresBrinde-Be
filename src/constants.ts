@@ -16,6 +16,7 @@ export const CATEGORY_NOT_REMOVED_EXCEPTION = "Category was not removed.";
 export const SUBCATEGORY_NOT_FOUND_EXCEPTION = "Sub category not found.";
 export const SUBCATEGORYNOTCREATEDEXCEPTION = "Sub category was not created.";
 export const SUBCATEGORY_ALREADY_EXISTS_EXCEPTION = "Sub category already exists.";
+export const SUBCATEGORY_NOT_REMOVED_EXCEPTION = "Subcategory was not removed.";
 
 export const PROPERTYNOTFOUNDEXCEPTION = "Property not found";
 export const PROPERTYNOTCREATEDEXCEPTION = "Property was not created.";
