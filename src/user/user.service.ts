@@ -1,105 +1,125 @@
-import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
-import {UserConverter} from "./user.converter";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { UserConverter } from "./user.converter";
 import {
   DATABASE_CONNECTION_EXCEPTION,
-  USERALREADYEXISTSEXCEPTION,
-  USERNOTFOUNDEXCEPTION,
+  USER_ALREADY_EXISTS_EXCEPTION,
+  USER_NOT_FOUND_EXCEPTION,
 } from "../constants";
-import {InjectRepository} from "@nestjs/typeorm";
-import {PaginatedUsersDto} from "./dto/paginated-users.Dto";
-import {DetailsUserDto} from "./dto/details-user.dto";
-import {CreateUserDto} from './dto/create-user.dto';
-import {UpdateUserDto} from './dto/update-user.dto';
-import {UserRepository} from "./user.repository";
-import {UserEntity} from "./entities/user.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { PaginatedUsersDto } from "./dto/paginated-users.Dto";
+import { DetailsUserDto } from "./dto/details-user.dto";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { UserRepository } from "./user.repository";
+import { UserEntity } from "./entities/user.entity";
 
 @Injectable()
 export class UserService {
-    constructor(
-        @InjectRepository(UserRepository)
-        private userRepository: UserRepository
+  constructor(
+    @InjectRepository(UserRepository)
+    private userRepository: UserRepository
+  ) {}
+
+  async create(createUserDto: CreateUserDto): Promise<DetailsUserDto> {
+    if (
+      await this.userRepository.findOne({
+        where: { email: createUserDto.email },
+      })
     ) {
+      throw new HttpException(
+        USER_ALREADY_EXISTS_EXCEPTION,
+        HttpStatus.CONFLICT
+      );
     }
 
-    async create(createUserDto: CreateUserDto): Promise<DetailsUserDto> {
-        if (await this.userRepository.findOne({where: {email: createUserDto.email}})) {
-            throw new HttpException(USERALREADYEXISTSEXCEPTION, HttpStatus.CONFLICT)
-        }
+    let userEntity: UserEntity =
+      UserConverter.fromCreateUserDtoToUserEntity(createUserDto);
 
-        let userEntity: UserEntity = UserConverter.fromCreateUserDtoToUserEntity(createUserDto);
-
-        try {
-            userEntity = await this.userRepository.save(userEntity)
-        } catch (e) {
-            throw new HttpException(
-              DATABASE_CONNECTION_EXCEPTION,
-              HttpStatus.BAD_REQUEST
-            );
-        }
-
-        return UserConverter.fromUserEntityToUserDetailsDto(userEntity);
+    try {
+      userEntity = await this.userRepository.save(userEntity);
+    } catch (e) {
+      throw new HttpException(
+        DATABASE_CONNECTION_EXCEPTION,
+        HttpStatus.BAD_REQUEST
+      );
     }
 
-    async findAll(limit: number, page: number): Promise<PaginatedUsersDto> {
-        const userEntities: UserEntity[] = await this.userRepository.getPaginatedUsers(limit, page)
+    return UserConverter.fromUserEntityToUserDetailsDto(userEntity);
+  }
 
-        let paginatedUsers: PaginatedUsersDto = new PaginatedUsersDto()
-        paginatedUsers.users = []
+  async findAll(limit: number, page: number): Promise<PaginatedUsersDto> {
+    const userEntities: UserEntity[] =
+      await this.userRepository.getPaginatedUsers(limit, page);
 
-        for (const element of userEntities) {
-            paginatedUsers.users.push(await UserConverter.fromUserEntityToUserDetailsDto(element))
-        }
+    let paginatedUsers: PaginatedUsersDto = new PaginatedUsersDto();
+    paginatedUsers.users = [];
 
-        return paginatedUsers;
+    for (const element of userEntities) {
+      paginatedUsers.users.push(
+        await UserConverter.fromUserEntityToUserDetailsDto(element)
+      );
     }
 
-    async findByEmail(email: string): Promise<UserEntity> {
-        const userEntity: UserEntity = await this.userRepository.findOne({where: {email: email}})
+    return paginatedUsers;
+  }
 
-        if (!userEntity) {
-            throw new HttpException(USERNOTFOUNDEXCEPTION, HttpStatus.NOT_FOUND)
-        }
+  async findByEmail(email: string): Promise<UserEntity> {
+    const userEntity: UserEntity = await this.userRepository.findOne({
+      where: { email: email },
+    });
 
-        return userEntity
+    if (!userEntity) {
+      throw new HttpException(USER_NOT_FOUND_EXCEPTION, HttpStatus.NOT_FOUND);
     }
 
-    async findOne(id: number): Promise<DetailsUserDto> {
-        const userEntity: UserEntity = await this.userRepository.findOne({where: {id: id}})
+    return userEntity;
+  }
 
-        if (!userEntity) {
-            throw new HttpException(USERNOTFOUNDEXCEPTION, HttpStatus.NOT_FOUND)
-        }
+  async findOne(id: number): Promise<DetailsUserDto> {
+    const userEntity: UserEntity = await this.userRepository.findOne({
+      where: { id: id },
+    });
 
-        return UserConverter.fromUserEntityToUserDetailsDto(userEntity);
+    if (!userEntity) {
+      throw new HttpException(USER_NOT_FOUND_EXCEPTION, HttpStatus.NOT_FOUND);
     }
 
-    async update(id: number, updateUserDto: UpdateUserDto) {
-        const user: UserEntity = await this.userRepository.findOne({where: {id: id}})
+    return UserConverter.fromUserEntityToUserDetailsDto(userEntity);
+  }
 
-        if (!user) {
-            throw new HttpException(USERNOTFOUNDEXCEPTION, HttpStatus.NOT_FOUND)
-        }
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user: UserEntity = await this.userRepository.findOne({
+      where: { id: id },
+    });
 
-        let userEntity: UserEntity = UserConverter.fromUpdateUserDtoToUserEntity(id, updateUserDto, user);
-
-        try {
-            userEntity = await this.userRepository.save(userEntity)
-        } catch (e) {
-            throw new HttpException(
-              DATABASE_CONNECTION_EXCEPTION,
-              HttpStatus.BAD_REQUEST
-            );
-        }
-
-        return UserConverter.fromUserEntityToUserDetailsDto(userEntity)
+    if (!user) {
+      throw new HttpException(USER_NOT_FOUND_EXCEPTION, HttpStatus.NOT_FOUND);
     }
 
-    async remove(id: number) {
-        await this.findOne(id)
+    let userEntity: UserEntity = UserConverter.fromUpdateUserDtoToUserEntity(
+      id,
+      updateUserDto,
+      user
+    );
 
-        return this.userRepository.delete(id)
-            .then(() => ({statusCode: HttpStatus.OK}))
-            .catch(() => ({statusCode: HttpStatus.NOT_MODIFIED}))
-
+    try {
+      userEntity = await this.userRepository.save(userEntity);
+    } catch (e) {
+      throw new HttpException(
+        DATABASE_CONNECTION_EXCEPTION,
+        HttpStatus.BAD_REQUEST
+      );
     }
+
+    return UserConverter.fromUserEntityToUserDetailsDto(userEntity);
+  }
+
+  async remove(id: number) {
+    await this.findOne(id);
+
+    return this.userRepository
+      .delete(id)
+      .then(() => ({ statusCode: HttpStatus.OK }))
+      .catch(() => ({ statusCode: HttpStatus.NOT_MODIFIED }));
+  }
 }

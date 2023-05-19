@@ -1,5 +1,5 @@
 import {IsNotEmpty, MaxLength} from "class-validator";
-import {INVALIDFIELDEXCEPTION} from "../../../constants";
+import {INVALID_FIELD_EXCEPTION} from "../../../constants";
 import {ApiProperty} from "@nestjs/swagger";
 import {CreatePriceQuantityDto} from "../priceQuantity/create-priceQuantity.dto";
 import {CreateProductPropertiesDto} from "../productProperties/create-productProperties.dto";
@@ -8,31 +8,31 @@ export class CreateProductDto {
 
     @IsNotEmpty()
     @ApiProperty({example: "TB_12345D", description: "Reference example"})
-    @MaxLength(10, {message: INVALIDFIELDEXCEPTION("Reference")})
+    @MaxLength(10, {message: INVALID_FIELD_EXCEPTION("Reference")})
     reference: string;
 
     @IsNotEmpty()
     @ApiProperty({example: "12345", description: "Catalog reference example"})
-    @MaxLength(10, {message: INVALIDFIELDEXCEPTION("Catelog reference")})
+    @MaxLength(10, {message: INVALID_FIELD_EXCEPTION("Catelog reference")})
     catalogReference: string;
 
     @ApiProperty({example: "Gaming chair", description: "Product name example"})
-    @MaxLength(40, {message: INVALIDFIELDEXCEPTION("Product name reference")})
+    @MaxLength(40, {message: INVALID_FIELD_EXCEPTION("Product name reference")})
     productName: string;
 
-    @MaxLength(600, {message: INVALIDFIELDEXCEPTION("Description")})
+    @MaxLength(600, {message: INVALID_FIELD_EXCEPTION("Description")})
     @ApiProperty({example: "Razer Gaming Chair Big Size with extra PC support", description: "Description example"})
     description: string;
 
-    @MaxLength(400, {message: INVALIDFIELDEXCEPTION("Keywords")})
+    @MaxLength(400, {message: INVALID_FIELD_EXCEPTION("Keywords")})
     @ApiProperty({example: "videogames gaming pc chair comfort", description: "Keywords example"})
     keywords: string;
 
-    @MaxLength(40, {message: INVALIDFIELDEXCEPTION("Brand")})
+    @MaxLength(40, {message: INVALID_FIELD_EXCEPTION("Brand")})
     @ApiProperty({example: "Microsoft", description: "Brand example"})
     brand: string;
 
-    @MaxLength(60, {message: INVALIDFIELDEXCEPTION("material")})
+    @MaxLength(60, {message: INVALID_FIELD_EXCEPTION("material")})
     @ApiProperty({example: "plastic and fabric"})
     material: string;
 
