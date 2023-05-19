@@ -1,11 +1,11 @@
 import { IsNotEmpty, IsString, Matches, MaxLength } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { INVALIDFIELDEXCEPTION } from "../../../constants";
+import { INVALID_FIELD_EXCEPTION } from "../../../constants";
 
 export class CreateSubCategoryDto {
   @IsNotEmpty()
   @ApiProperty({ example: "example", description: "name example" })
-  @MaxLength(60, { message: INVALIDFIELDEXCEPTION("name") })
+  @MaxLength(60, { message: INVALID_FIELD_EXCEPTION("name") })
   name: string;
 
   @IsNotEmpty()

@@ -9,7 +9,10 @@ import {BudgetEntity} from "../entities/budget.entity";
 import {Connection} from "typeorm";
 import {ProductConverter} from "../../products/converters/product.converter";
 import {BudgetProductService} from "./budgetProduct.service";
-import { BUDGETNOTFOUND, DATABASE_CONNECTION_EXCEPTION } from "../../constants";
+import {
+  BUDGET_NOT_FOUND,
+  DATABASE_CONNECTION_EXCEPTION,
+} from "../../constants";
 import {BudgetProductDetailsDto} from "../dto/budgetProduct/budgetProductDetails.dto";
 import {BudgetProductConverter} from "../converters/budgetProduct.converter";
 import {DetailsUserDto} from "../../user/dto/details-user.dto";
@@ -83,7 +86,7 @@ export class BudgetService {
         })
 
         if (!budgetEntity) {
-            throw new HttpException(BUDGETNOTFOUND, HttpStatus.NOT_FOUND)
+            throw new HttpException(BUDGET_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
         for (const budgetProduct of budgetEntity.products) {
@@ -193,7 +196,7 @@ export class BudgetService {
         const budgetEntity: BudgetEntity = await this.budgetRepository.findOne(body.budgetId)
 
         if (!budgetEntity) {
-            throw new HttpException(BUDGETNOTFOUND, HttpStatus.NOT_FOUND)
+            throw new HttpException(BUDGET_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
         await this.budgetImageService.addImage(budgetEntity, file.path)

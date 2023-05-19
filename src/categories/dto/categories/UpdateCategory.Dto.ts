@@ -1,6 +1,6 @@
 import { IsNotEmpty, MaxLength } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { INVALIDFIELDEXCEPTION } from "../../../constants";
+import { INVALID_FIELD_EXCEPTION } from "../../../constants";
 
 export class UpdateCategoryDto {
   @IsNotEmpty()
@@ -9,7 +9,7 @@ export class UpdateCategoryDto {
     description: "Category Name",
     maxLength: 60,
   })
-  @MaxLength(60, { message: INVALIDFIELDEXCEPTION("name") })
+  @MaxLength(60, { message: INVALID_FIELD_EXCEPTION("name") })
   name: string;
 
   @ApiProperty({
@@ -18,6 +18,6 @@ export class UpdateCategoryDto {
     maxLength: 200,
     required: false,
   })
-  @MaxLength(200, { message: INVALIDFIELDEXCEPTION("description") })
+  @MaxLength(200, { message: INVALID_FIELD_EXCEPTION("description") })
   description?: string;
 }
