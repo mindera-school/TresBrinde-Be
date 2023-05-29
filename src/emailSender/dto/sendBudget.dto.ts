@@ -1,17 +1,18 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
   ArrayNotEmpty,
-  IsArray,
   IsOptional,
   MaxLength,
   MinLength,
+  ValidateNested,
 } from "class-validator";
+import { Budget } from "./budget.dto";
 
 export class SendBudgetDto {
-  @IsArray()
   @ArrayNotEmpty()
-  @ApiProperty({ type: [Number] })
-  budgets: number[];
+  @ValidateNested({ each: true })
+  @ApiProperty({ type: [Budget] })
+  budgets: Budget[];
   @ApiProperty({ type: String })
   toEmail: String;
   @ApiProperty({ type: String })
@@ -24,6 +25,6 @@ export class SendBudgetDto {
   zipCode: String;
   @MaxLength(200)
   @IsOptional()
-  @ApiProperty({ type: String })
+  @ApiProperty({ type: String , required: false })
   message: String;
 }

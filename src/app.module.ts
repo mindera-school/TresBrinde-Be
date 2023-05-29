@@ -11,9 +11,10 @@ import { CategoriesModule } from "./categories/categories.module";
 import { FileModule } from "./files/file.module";
 import { BudgetModule } from "./budget/budget.module";
 import { MailerModule } from "@nestjs-modules/mailer";
-import { EmailModule } from "./emailSender/email.module"; // Importe o EmailModule
+import { EmailModule } from "./emailSender/email.module";
 import { join } from "path";
 import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
+
 
 @Module({
   imports: [
@@ -38,7 +39,7 @@ import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handleba
     ProductModule,
     FileModule,
     BudgetModule,
-    EmailModule, // Adicione o EmailModule aos imports
+    EmailModule,
   ],
   providers: [
     {
