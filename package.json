@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/bull": "^0.4.1",
     "@nestjs/common": "^7.6.15",
     "@nestjs/config": "^0.6.3",
@@ -51,8 +52,10 @@
     "fastify-helmet": "^5.3.2",
     "fastify-multer": "^2.0.2",
     "fastify-swagger": "^4.7.0",
+    "handlebars": "^4.7.7",
     "mongodb": "^4.7.0",
     "mysql2": "^2.2.5",
+    "nodemailer": "^6.9.2",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",

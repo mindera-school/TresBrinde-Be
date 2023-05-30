@@ -44,28 +44,22 @@ import {
   FILE_NOT_FOUND_EXCEPTION,
   FILE_NOT_REMOVED_EXCEPTION,
   ONLY_IMAGE_ALLOWED_EXCEPTION,
-  PRICE_QUANTITY_NOT_CREATED_EXCEPTION,
   PRODUCT_ALREADY_EXISTS_EXCEPTION,
   PRODUCT_NOT_FOUND_EXCEPTION,
   PRODUCT_NOT_REMOVED_EXCEPTION,
-  PROPERTY_NOT_CREATED_EXCEPTION,
-  SUBCATEGORY_NOT_CREATED_EXCEPTION,
   SUBCATEGORY_NOT_FOUND_EXCEPTION,
   USER_NOT_AUTORIZED,
 } from "src/constants";
 import { DatabaseConnectionFailedDto } from "src/errorDTOs/databaseConnectionFailed.Dto";
 import { ProductAlreadyExistDto } from "src/errorDTOs/productAlreadyExists.Dto";
 import { UserNotAutorizedDto } from "src/errorDTOs/userNotAutorized.Dto";
-import { SubcategoryNotCreatedDto } from "src/errorDTOs/subcategoryNotCreated.Dto";
 import { CategoryNotCreatedDto } from "src/errorDTOs/categoryNotCreated.Dto";
-import { PriceQuantityNotCreatedDto } from "src/errorDTOs/priceQuantityNotCreated.Dto";
-import { PropertyNotCreatedDto } from "src/errorDTOs/propertyNotCreated.Dto";
 import { PaginatedProductDto } from "./dto/products/paginated-product.dto";
 import { SubcategoryNotFoundDto } from "src/errorDTOs/subcategoryNotFound.Dto";
 import { ProductNotRemovedDto } from "src/errorDTOs/productNotRemoved.Dto";
 import { FileNotRemovedDto } from "src/errorDTOs/fileNotRemoved.Dto";
 import { FileNotFoundDto } from "src/errorDTOs/fileNotFound.Dto";
-import { ProductNotFoundDto } from "src/errorDTOs/ProductNotFound.Dto";
+import { ProductNotFoundDto } from "src/errorDTOs/productNotFound.Dto";
 import { OnlyImagesAllowedDto } from "src/errorDTOs/onlyImagesAllowed.Dto";
 
 @ApiTags("Product")
