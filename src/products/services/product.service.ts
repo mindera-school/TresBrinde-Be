@@ -40,6 +40,12 @@ import { TableImagesDetailsDto } from "../dto/tableImages/tableImage-details.dto
 import { TableImageConverter } from "../converters/tableImage.converter";
 import { CreateBulkProductsDto } from "../dto/products/createBulkProducts.dto";
 import { CategoryEntity } from "../../categories/entities/category.entity";
+import { AddWebImageToProductDto } from "src/files/dto/addWebImageToProduct.dto";
+import * as validUrl from "valid-url";
+import { ProductNotFoundDto } from "src/errorDTOs/productNotFound.Dto";
+import { FileNotFoundDto } from "src/errorDTOs/fileNotFound.Dto";
+import { DatabaseConnectionFailedDto } from "src/errorDTOs/databaseConnectionFailed.Dto";
+import { CannotAddImageToPropertyDto } from "src/errorDTOs/cannotAddImageToProperty.Dto";
 
 @Injectable()
 export class ProductService {
@@ -617,6 +623,47 @@ export class ProductService {
     }
 
     return this.findOne(productEntity.id);
+  }
+
+  async addWebImageToProduct(body: AddWebImageToProductDto) {
+    const productEntity: ProductEntity = await this.productRepository.findOne(
+      body.productId
+    );
+
+    if (!productEntity) {
+      throw new ProductNotFoundDto();
+    }
+
+    if (body.propertyId) {
+      await this.productPropertyService.addWebImageToProperty(
+        body.propertyId,
+        body.photo_url
+      );
+    } else if (body.isMainImage && body.isMainImage === true) {
+      if (productEntity.mainImage) {
+        const isUrl = validUrl.isWebUri(productEntity.mainImage);
+        if (!isUrl) {
+          try {
+            const fs = require("fs");
+            fs.unlinkSync(productEntity.mainImage);
+          } catch (e) {
+            throw new FileNotFoundDto();
+          }
+        }
+      }
+
+      productEntity.mainImage = body.photo_url;
+
+      try {
+        await this.productRepository.save(productEntity);
+      } catch (e) {
+        throw new DatabaseConnectionFailedDto();
+      }
+    } else {
+      throw new CannotAddImageToPropertyDto();
+    }
+
+    return this.productRepository.findOne(productEntity.id);
   }
 
   async removeImageFromProduct(id: number) {
