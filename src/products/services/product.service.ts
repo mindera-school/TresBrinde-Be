@@ -651,12 +651,13 @@ export class ProductService {
           }
         }
       }
-
+      
       productEntity.mainImage = body.photo_url;
 
       try {
         await this.productRepository.save(productEntity);
       } catch (e) {
+console.log(e)
         throw new DatabaseConnectionFailedDto();
       }
     } else {

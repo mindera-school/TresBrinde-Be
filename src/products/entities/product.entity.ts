@@ -29,7 +29,7 @@ export class ProductEntity {
     @Column({length: 600})
     keywords: string;
 
-    @Column({length: 150, nullable: true})
+    @Column({length: 1000, nullable: true})
     mainImage?: string;
 
     @Column({length: 40})
