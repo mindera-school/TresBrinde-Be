@@ -17,7 +17,7 @@ export class EmailController {
   @Public()
   @Roles()
   @ApiOperation({ summary: "Send email" })
-  @ApiResponse({ status: 200, description: "Email sent successfully" })
+  @ApiResponse({ status: 200 })
   @ApiResponse({ status: 400, description: "Bad request" })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
