@@ -29,6 +29,6 @@ export class ProductPropertyEntity {
     @Column({length: 300})
     value: string;
 
-    @Column({length: 300, nullable: true})
+    @Column({length: 1000, nullable: true})
     image?: string;
 }

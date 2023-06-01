@@ -24,6 +24,8 @@ export const PROPERTY_NOT_FOUND_EXCEPTION = "Property not found";
 export const PROPERTY_NOT_CREATED_EXCEPTION = "Property was not created.";
 export const PROPERTY_ALREADY_EXISTS_EXCEPTION = "Property already exists";
 
+export const CANNOT_ADD_IMAGE_TO_PROPERTY_EXCEPTION = "Cannot add web image to table images. Please provide a file instead.";
+
 export const PRICE_QUANTITY_NOT_CREATED_EXCEPTION =
   "Price quantity was not created.";
 
