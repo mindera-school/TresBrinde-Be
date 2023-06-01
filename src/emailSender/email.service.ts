@@ -47,6 +47,7 @@ export class EmailService {
         const updatedBudget = {
           ...budget,
           productId: productDetails.id,
+          reference: productDetails.reference,
           productName: productDetails.productName,
           mainImage: productDetails.mainImage,
         };
