@@ -57,10 +57,7 @@ export class EmailService {
 
       await this.mailSender.sendMail(emailData);
 
-<<<<<<< HEAD
       return { message: "Email sent successfully" };
-=======
->>>>>>> main
     } catch (error) {
       if (error instanceof ProductNotFoundDto) {
         throw new ProductNotFoundDto();
