@@ -657,7 +657,6 @@ export class ProductService {
       try {
         await this.productRepository.save(productEntity);
       } catch (e) {
-console.log(e)
         throw new DatabaseConnectionFailedDto();
       }
     } else {
