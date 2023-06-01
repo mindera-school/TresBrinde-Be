@@ -13,6 +13,9 @@ import { QueryRunner } from "typeorm";
 import { PropertyConverter } from "../converters/property.converter";
 import { ProductPropertyRepository } from "../repositories/productProperties.repository";
 import { ProductPropertyDetailsDto } from "../dto/productProperties/productProperty-details.dto";
+import * as validUrl from "valid-url";
+import { PropertyNotFoundDto } from "src/errorDTOs/propertyNotFound.Dto";
+import { FileNotFoundDto } from "src/errorDTOs/fileNotFound.Dto";
 
 @Injectable()
 export class ProductPropertyService {
@@ -259,6 +262,31 @@ export class ProductPropertyService {
     }
 
     productPropertyEntity.image = file.path;
+
+    await this.productPropertyRepository.save(productPropertyEntity);
+  }
+
+  async addWebImageToProperty(propertyId: number, imageUrl: string) {
+    const productPropertyEntity: ProductPropertyEntity =
+      await this.productPropertyRepository.findOne(propertyId);
+
+    if (!productPropertyEntity) {
+      throw new PropertyNotFoundDto();
+    }
+
+    if (productPropertyEntity.image) {
+      const isUrl = validUrl.isWebUri(productPropertyEntity.image);
+      if (!isUrl) {
+        try {
+          const fs = require("fs");
+          fs.unlinkSync(productPropertyEntity.image);
+        } catch (e) {
+          throw new FileNotFoundDto();
+        }
+      }
+    }
+
+    productPropertyEntity.image = imageUrl;
 
     await this.productPropertyRepository.save(productPropertyEntity);
   }

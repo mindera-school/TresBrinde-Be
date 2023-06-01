@@ -39,6 +39,7 @@ import { Request } from "express";
 import { ApiImplicitQuery } from "@nestjs/swagger/dist/decorators/api-implicit-query.decorator";
 import { CreateBulkProductsDto } from "./dto/products/createBulkProducts.dto";
 import {
+  CANNOT_ADD_IMAGE_TO_PROPERTY_EXCEPTION,
     CATEGORY_NOT_CREATED_EXCEPTION,
   DATABASE_CONNECTION_EXCEPTION,
   FILE_NOT_FOUND_EXCEPTION,
@@ -47,6 +48,7 @@ import {
   PRODUCT_ALREADY_EXISTS_EXCEPTION,
   PRODUCT_NOT_FOUND_EXCEPTION,
   PRODUCT_NOT_REMOVED_EXCEPTION,
+  PROPERTY_NOT_FOUND_EXCEPTION,
   SUBCATEGORY_NOT_FOUND_EXCEPTION,
   USER_NOT_AUTORIZED,
 } from "src/constants";
@@ -61,6 +63,9 @@ import { FileNotRemovedDto } from "src/errorDTOs/fileNotRemoved.Dto";
 import { FileNotFoundDto } from "src/errorDTOs/fileNotFound.Dto";
 import { ProductNotFoundDto } from "src/errorDTOs/productNotFound.Dto";
 import { OnlyImagesAllowedDto } from "src/errorDTOs/onlyImagesAllowed.Dto";
+import { AddWebImageToProductDto } from "src/files/dto/addWebImageToProduct.dto";
+import { PropertyNotFoundDto } from "src/errorDTOs/propertyNotFound.Dto";
+import { CannotAddImageToPropertyDto } from "src/errorDTOs/cannotAddImageToProperty.Dto";
 
 @ApiTags("Product")
 @Controller("product")
@@ -344,6 +349,43 @@ export class ProductController {
     @Req() req: Request
   ) {
     return this.productService.addImageToProduct(body, file);
+  }
+
+  @Post("addWebImage")
+  @Roles(UserRole.Admin)
+  @ApiOperation({ summary: "Adds a web image to a product" })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Image added to product successfully",
+    type: ProductDetailsDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: PRODUCT_NOT_FOUND_EXCEPTION,
+    type: ProductNotFoundDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: PROPERTY_NOT_FOUND_EXCEPTION,
+    type: PropertyNotFoundDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: FILE_NOT_FOUND_EXCEPTION,
+    type: FileNotFoundDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: CANNOT_ADD_IMAGE_TO_PROPERTY_EXCEPTION,
+    type: CannotAddImageToPropertyDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: DATABASE_CONNECTION_EXCEPTION,
+    type: DatabaseConnectionFailedDto,
+  })
+  async addWebImageToProduct(@Body() body: AddWebImageToProductDto) {
+    return this.productService.addWebImageToProduct(body);
   }
 
   private splitProductsToBulks(arr, bulkSize = 100): CreateBulkProductsDto[][] {
