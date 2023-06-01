@@ -377,6 +377,22 @@ export class ProductService {
       );
     }
 
+    // This part of the code is a temporary measure for front-end problem
+    // TODO 1: FrontEnd needs to catch this information direct on product Properties
+    const propertyImages =
+      await this.productPropertyService.getAllProductPropertiesByProductId(id);
+
+    for (const property of propertyImages) {
+      if (property.image !== null) {
+        tableImageDetailsDtoList.push(
+          TableImageConverter.fromProductPropertyEntityToTableImageDetailsDto(
+            property
+          )
+        );
+      }
+    }
+    //
+
     return ProductConverter.fromProductEntityToProductDetailsDto(
       productEntity,
       subCategoryDetailsDtoList,
@@ -651,7 +667,7 @@ export class ProductService {
           }
         }
       }
-      
+
       productEntity.mainImage = body.photo_url;
 
       try {
