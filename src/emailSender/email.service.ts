@@ -31,7 +31,6 @@ export class EmailService {
           message,
           budgets: [],
         },
-        attachments: [],
       };
 
       const updatedBudgets: any[] = [];
@@ -42,41 +41,26 @@ export class EmailService {
         );
 
         if (!productDetails) {
-          throw new ProductNotFoundDto;
-        }
-
-        let imagePath;
-        if (productDetails.mainImage !== null) {
-          imagePath = join(process.cwd(), productDetails.mainImage);
+          throw new ProductNotFoundDto();
         }
 
         const updatedBudget = {
           ...budget,
           productId: productDetails.id,
           productName: productDetails.productName,
-          mainImage: imagePath ? `cid:image-${budget.productId}` : null,
+          mainImage: productDetails.mainImage,
         };
         updatedBudgets.push(updatedBudget);
-
-        if (imagePath) {
-          const attachment = {
-            filename: productDetails.mainImage,
-            path: imagePath,
-            cid: `image-${budget.productId}`,
-          };
-
-          emailData.attachments.push(attachment);
-        }
       }
 
       emailData.context.budgets = updatedBudgets;
 
       await this.mailSender.sendMail(emailData);
 
-      return "Email sent successfully";
+      return { message: "Email sent successfully" };
     } catch (error) {
       if (error instanceof ProductNotFoundDto) {
-        throw new ProductNotFoundDto;
+        throw new ProductNotFoundDto();
       }
       throw new InternalServerErrorDto();
     }
