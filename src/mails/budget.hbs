@@ -1,85 +1,136 @@
 <html>
 
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+      }
 
-        h1 {
-            color: #333;
-        }
+      a {
+        text-decoration: none;
+        color: white;
+      }
 
-        h2 {
-            color: #555;
-        }
+      span {
+        color: white;
+      }
 
-        p {
-            margin-bottom: 10px;
-        }
+      h1 {
+        color: white;
+        background-color: #030852;
+        height: 60px;
+        text-align: center;
+        padding: 15px;
+        box-sizing: border-box;
+      }
 
-        ul {
-            margin-top: 0;
-            padding-left: 20px;
-        }
+      footer {
+        background-color: #030852;
+        height:
+          60px;
+        text-align: center;
+        padding: 20px;
+        box-sizing: border-box;
+      }
 
-        li {
-            margin-bottom: 5px;
-        }
+      h2 {
+        color: #2F54EB;
+      }
 
-        .item {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 20px;
-        }
+      h3 {
+        height: 25px;
+        color: #1890FF;
+      }
 
-        .item h3 {
-            margin: 0;
-            color: #333;
-        }
+      p {
+        margin-bottom: 10px;
+        color: black;
+      }
 
-        .item img {
-            max-width: 100px;
-            max-height: 100px;
-            margin-right: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+      .item {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 20px;
+      }
+
+      .item h3 {
+        margin: 0;
+        color: #1890FF;
+      }
+
+      .item img {
+        width: 100px;
+        height: 100px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        object-fit: cover;
+      }
+
+      .imgTitle {
+        display: inline-block;
+      }
+
+      .footerSpacing {
+        margin-right: 10px;
+      }
+
     </style>
-</head>
 
-<body>
+  </head>
+
+  <body>
     <h1>Lista do Orçamento</h1>
     <h2>Dados do Cliente:</h2>
     <p>
-        <strong>Nome:</strong> {{name}}<br>
-        <strong>E-mail:</strong> {{toEmail}}<br>
-        <strong>Endereço:</strong> {{address}}<br>
-        <strong>Código Postal:</strong> {{zipCode}}<br>
-        {{#if message}}
-        <strong>Mensagem:</strong> {{message}}<br>
-        {{/if}}
+      <strong>Nome:</strong>
+      {{name}}<br />
+      <strong>E-mail:</strong>
+      {{toEmail}}<br />
+      <strong>Endereço:</strong>
+      {{address}}<br />
+      <strong>Código Postal:</strong>
+      {{zipCode}}<br />
+      {{#if message}}
+        <strong>Mensagem:</strong>
+        {{message}}<br />
+      {{/if}}
     </p>
     <h2>Itens do Orçamento:</h2>
     {{#each budgets}}
-    <div class="item">
-        <h3>{{productName}}</h3>
-        {{#if mainImage}}
-        <img src="{{mainImage}}" alt="{{productName}}">
-        {{/if}}
-        <p><strong>Quantidade:</strong> {{quantity}}</p>
-        <p><strong>Propriedades:</strong></p>
-        <ul>
-            {{#each properties}}
-            <li>{{propertyName}}: {{propertyValue}}</li>
-            {{/each}}
-        </ul>
-    </div>
+      <div class="item">
+ <h3>{{productName}}</h3>
+        <table>
+          <tr>
+                        <td>
+               <img src="{{mainImage}}" alt="{{productName}}" />
+            </td>
+            <td>
+              <p><strong>Referencia:</strong> {{reference}}</p>
+              <p><strong>Quantidade:</strong> {{quantity}}</p>
+              {{#each properties}}
+                <p>
+                    <strong>{{propertyName}}:</strong>
+                    {{propertyValue}}
+                  </p>
+                {{/each}}
+            </td>
+          </tr>
+        </table>
+      </div>
     {{/each}}
-</body>
+    <footer>
+        <a class="footerSpacing" href="mailto:geral@tresbrinde.com">geral@tresbrinde.com</a>
+        <a class="footerSpacing" href="https://www.facebook.com/people/Tr%C3%AAs-Brinde-Publicidade/100067500792458/">
+          Três Brinde Publicidade
+        </a>
+        <span class="footerSpacing" >919 923 334</span>
+        <span class="footerSpacing" >224 898 322</span>
+    </footer>
+  </body>
 
 </html>
