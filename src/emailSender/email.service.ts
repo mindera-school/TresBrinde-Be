@@ -5,6 +5,7 @@ import { ProductService } from "../products/services/product.service";
 import { join } from "path";
 import { InternalServerErrorDto } from "src/errorDTOs/internalServerError.Dto";
 import { ProductNotFoundDto } from "src/errorDTOs/productNotFound.Dto";
+import { log } from "console";
 
 @Injectable()
 export class EmailService {
@@ -43,7 +44,7 @@ export class EmailService {
         if (!productDetails) {
           throw new ProductNotFoundDto();
         }
-
+        console.log(productDetails.mainImage);
         const updatedBudget = {
           ...budget,
           productId: productDetails.id,
@@ -55,7 +56,6 @@ export class EmailService {
       }
 
       emailData.context.budgets = updatedBudgets;
-
       await this.mailSender.sendMail(emailData);
 
       return { message: "Email sent successfully" };
