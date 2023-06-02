@@ -35,6 +35,7 @@ import {
 } from "@nestjs/swagger";
 import { CategoryNotRemovedDto } from "src/errorDTOs/categoryNotRemoved.Dto";
 import { SubcategoryNotRemovedDto } from "src/errorDTOs/subcategoryNotRemoved.Dto";
+import { Console } from "console";
 
 @Injectable()
 @ApiTags("Categories")
@@ -132,6 +133,15 @@ export class CategoriesService {
     paginatedCategories.categories = [];
 
     for (const element of categoryEntities) {
+      const capitalizedCategoryName =
+        element.name.charAt(0).toUpperCase() + element.name.slice(1);
+      element.name = capitalizedCategoryName;
+
+      for (const subCategory of element.subCategories) {
+        const capitalizedSubCategoryName =
+          subCategory.name.charAt(0).toUpperCase() + subCategory.name.slice(1);
+        subCategory.name = capitalizedSubCategoryName;
+      }
       paginatedCategories.categories.push(element);
     }
 
@@ -155,6 +165,9 @@ export class CategoriesService {
     paginatedSubCategories.subCategories = [];
 
     for (const element of subCategoryEntities) {
+      const capitalizedName =
+        element.name.charAt(0).toUpperCase() + element.name.slice(1);
+      element.name = capitalizedName;
       paginatedSubCategories.subCategories.push(element);
     }
 
@@ -174,6 +187,17 @@ export class CategoriesService {
       );
     }
 
+    const capitalizedName =
+      categoryEntity.name.charAt(0).toUpperCase() +
+      categoryEntity.name.slice(1);
+    categoryEntity.name = capitalizedName;
+
+    for (const subCategory of categoryEntity.subCategories) {
+      const capitalizedSubCategoryName =
+        subCategory.name.charAt(0).toUpperCase() + subCategory.name.slice(1);
+      subCategory.name = capitalizedSubCategoryName;
+    }
+
     return CategoriesConverter.fromCategoryEntityToCategoryDetailsDto(
       categoryEntity
     );
@@ -189,6 +213,10 @@ export class CategoriesService {
         HttpStatus.NOT_FOUND
       );
     }
+    const capitalizedName =
+      subCategoryEntity.name.charAt(0).toUpperCase() +
+      subCategoryEntity.name.slice(1);
+    subCategoryEntity.name = capitalizedName;
 
     return CategoriesConverter.fromSubCategoryEntityToSubCategoryDetailsDto(
       subCategoryEntity
