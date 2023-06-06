@@ -109,4 +109,5 @@ dist
 /images/
 /docker-compose/
 /src/secrets/
+/mail/
 .vscode

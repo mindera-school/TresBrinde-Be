@@ -9,6 +9,9 @@ import {
 import { Budget } from "./budget.dto";
 
 export class SendBudgetDto {
+  @ApiProperty({ type: "array", items: { type: "string", format: "binary" } })
+  toPrintImages: string[];
+
   @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @ApiProperty({

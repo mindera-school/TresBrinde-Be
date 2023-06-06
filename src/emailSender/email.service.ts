@@ -2,10 +2,8 @@ import { MailerService } from "@nestjs-modules/mailer";
 import { Injectable } from "@nestjs/common";
 import { SendBudgetDto } from "./dto/sendBudget.dto";
 import { ProductService } from "../products/services/product.service";
-import { join } from "path";
 import { InternalServerErrorDto } from "src/errorDTOs/internalServerError.Dto";
 import { ProductNotFoundDto } from "src/errorDTOs/productNotFound.Dto";
-import { log } from "console";
 
 @Injectable()
 export class EmailService {
@@ -14,7 +12,7 @@ export class EmailService {
     private readonly productService: ProductService
   ) {}
 
-  async sendBudget(body: SendBudgetDto) {
+  async sendBudget(body: SendBudgetDto, files: Express.Multer.File[]) {
     try {
       const { budgets, toEmail, name, address, zipCode, message } = body;
 
@@ -32,6 +30,10 @@ export class EmailService {
           message,
           budgets: [],
         },
+        attachments: files.map((file) => ({
+          filename: file.originalname,
+          path: file.path,
+        })),
       };
 
       const updatedBudgets: any[] = [];
@@ -44,7 +46,7 @@ export class EmailService {
         if (!productDetails) {
           throw new ProductNotFoundDto();
         }
-        console.log(productDetails.mainImage);
+
         const updatedBudget = {
           ...budget,
           productId: productDetails.id,
