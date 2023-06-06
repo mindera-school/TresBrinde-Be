@@ -11,8 +11,6 @@ import { diskStorage } from "multer";
 import { editFileName, imageFileFilter } from "src/files/utils/file.upload";
 import { FastifyFilesInterceptor } from "src/files/multipleFiles.interceptor";
 import { Budget } from "./dto/budget.dto";
-import { plainToClass } from "class-transformer";
-import { FileInterceptor } from "@nestjs/platform-express";
 
 @ApiTags("Email")
 @Controller("email")
