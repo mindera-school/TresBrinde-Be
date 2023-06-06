@@ -4,6 +4,7 @@ import { SendBudgetDto } from "./dto/sendBudget.dto";
 import { ProductService } from "../products/services/product.service";
 import { InternalServerErrorDto } from "src/errorDTOs/internalServerError.Dto";
 import { ProductNotFoundDto } from "src/errorDTOs/productNotFound.Dto";
+import { unlink } from "fs/promises";
 
 @Injectable()
 export class EmailService {
@@ -59,7 +60,9 @@ export class EmailService {
 
       emailData.context.budgets = updatedBudgets;
       await this.mailSender.sendMail(emailData);
-
+      for (const file of files) {
+        await unlink(file.path);
+      }
       return { message: "Email sent successfully" };
     } catch (error) {
       if (error instanceof ProductNotFoundDto) {
