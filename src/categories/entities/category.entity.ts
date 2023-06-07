@@ -16,10 +16,10 @@ export class CategoryEntity {
   @ApiProperty({ description: "Category Name", maxLength: 60 })
   name: string;
 
-  @Column({ length: 200, nullable: true })
+  @Column({ length: 600, nullable: true })
   @ApiProperty({
     description: "Category Description",
-    maxLength: 200,
+    maxLength: 600,
     required: false,
   })
   description?: string;
@@ -30,10 +30,10 @@ export class CategoryEntity {
   )
   public subCategories: SubCategoryEntity[];
 
-  @Column({ length: 150, nullable: true })
+  @Column({ length: 1000, nullable: true })
   @ApiProperty({
     description: "Category Image URL",
-    maxLength: 150,
+    maxLength: 1000,
     required: false,
   })
   image?: string;
